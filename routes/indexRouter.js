@@ -1,38 +1,21 @@
 const { Router } = require("express");
 const indexRoute = Router();
-const messages = [];
+const {
+  getAllMessages,
+  newMessage,
+  sendMessage,
+  displayMessage,
+  noMessageFound,
+} = require("../controllers/messageController");
 
-indexRoute.get("/", (req, res) => {
-  res.render("index", { title: "Mini Messageboard", messages: messages });
-});
+indexRoute.get("/", getAllMessages);
 
-indexRoute.get("/new", (req, res) => {
-  res.render("form");
-});
+indexRoute.get("/new", newMessage);
 
-indexRoute.post("/new", (req, res) => {
-  messages.push({
-    id: messages.length,
-    text: req.body.messageText,
-    user: req.body.authorName,
-    added: new Date(),
-  });
-  res.redirect("/");
-});
+indexRoute.post("/new", sendMessage);
 
-indexRoute.get("/:messageid/message", (req, res) => {
-  const msgId = Number(req.params.messageid);
-  const foundMessage = messages.find((message) => message.id === msgId);
+indexRoute.get("/:messageid/message", displayMessage);
 
-  if (!foundMessage) {
-    return res.status(404).send("Message not found");
-  }
-
-  res.render("message", { message: foundMessage });
-});
-
-indexRoute.get("/*splat", (req, res) => {
-  res.status(404).send("Invalid url");
-});
+indexRoute.get("/*splat", noMessageFound);
 
 module.exports = indexRoute;
