@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Messages</title>
+  </head>
+  <body>
+    <h1><%=title%></h1>
+    <% for (let i = 0; i < messages.length;i++) {%>
+    <h3>User -> <%=messages[i].user%></h3>
+    <h3>Message -> <%=messages[i].text%></h3>
+    <h3>Date added -> <%=messages[i].added%></h3>
+
+    <button
+      onclick="
+        window.location.href= '/<%=messages[i].id%>/message'
+        
+      
+        "
+    >
+      Open Message
+    </button>
+    <% } %>
+    <br />
+    <br />
+    <br />
+    <a href="/new">Send a message</a>
+  </body>
+</html>
