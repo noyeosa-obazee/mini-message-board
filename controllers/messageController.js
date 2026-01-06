@@ -1,4 +1,5 @@
 const db = require("../db/queries");
+// const { body, validationResult, matchedData } = require("express-validator");
 
 const getAllMessages = async (req, res) => {
   const messages = await db.getAllMessages();
