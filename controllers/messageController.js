@@ -1,6 +1,7 @@
-const messages = [];
+const db = require("../db/queries");
 
-const getAllMessages = (req, res) => {
+const getAllMessages = async (req, res) => {
+  const messages = await db.getAllMessages();
   res.render("index", { title: "Mini Messageboard", messages: messages });
 };
 
@@ -8,25 +9,21 @@ const newMessage = (req, res) => {
   res.render("form");
 };
 
-const sendMessage = (req, res) => {
-  messages.push({
-    id: messages.length,
-    text: req.body.messageText,
-    user: req.body.authorName,
-    added: new Date(),
-  });
+const sendMessage = async (req, res) => {
+  const message = req.body;
+  await db.sendNewMessage(message);
   res.redirect("/");
 };
 
-const displayMessage = (req, res) => {
+const displayMessage = async (req, res) => {
   const msgId = Number(req.params.messageid);
-  const foundMessage = messages.find((message) => message.id === msgId);
+  const foundMessage = await db.displayAMessage(msgId);
 
-  if (!foundMessage) {
+  if (!foundMessage.length) {
     return res.status(404).send("Message not found");
   }
 
-  res.render("message", { message: foundMessage });
+  res.render("message", { message: foundMessage[0] });
 };
 
 const noMessageFound = (req, res) => {
